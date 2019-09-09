@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CRUD on Vue.js</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div id="app" class="container mt-5">
+        <h2>{{titulo}}</h2>
+
+        <div class="input-group mt-5">
+            <div class="input-group-prepend">
+                <span class="input-group-text text-dark">Nombre / Cantidad</span>
+            </div>
+            <input type="text" aria-label="Nombre" class="form-control" v-model="nombreNuevoProducto">
+            <input type="number" aria-label="Cantidad" class="form-control" v-model="cantidadNuevoProducto">
+            <div class="input-group-append">
+                <button class="btn btn-success" type="button" id="button-addon2" @click="agregarProducto">Agregar</button>
+            </div>
+        </div>
+
+        <table class="table mt-5">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col" v-for="columna of columnas">{{columna}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(producto, index) of productos">
+                <th scope="row">{{index+1}}</th>
+                <td><input class="form-control" type="text" v-bind:disabled="!producto.editar" v-model="producto.nombre"></td>
+                <td>{{producto.cantidad}}</td>
+                <td>
+                    <span v-if="producto.cantidad <= 0">AGOTADO</span>
+                    <span v-if="producto.cantidad > 0">EN STOCK</span>
+                </td>
+                <td>
+                    <button class="btn btn-primary" @click="aumentarCantidad(index)">+</button>
+                    <button class="btn btn-warning" @click="disminuirCantidad(index)">-</button>
+                    <button class="btn btn-info" v-bind:disabled="!producto.editar" @click="editarProducto(index)">GUARDAR</button>
+                    <button class="btn btn-secondary" @click="habilitarEditar(index)">EDITAR</button>
+                    <button class="btn btn-danger" @click="eliminarProducto(index)">x</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
