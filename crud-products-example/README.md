@@ -1,2 +1,2 @@
 # CRUD of productos vuejs
-This example is a vuejs first aproach using local storage of browsers. Execute index.hmtl and test it.
+This example is a first approach of vuejs using local storage of browsers. Run index.hmtl and try it out.
