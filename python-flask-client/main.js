@@ -66,10 +66,6 @@ Vue.component('editar', {
         <h5 class="h5 text-light text-center">EDITAR TODO</h5>
         <form class="mt-5" novalidate>
             <div class="form-group">
-                <label for="title" class="text-light">Id</label>
-                <input type="text" class="form-control" id="idtodo" disabled :value="editedId">
-            </div>
-            <div class="form-group">
                 <label for="title" class="text-light">Título</label>
                 <input type="text" class="form-control" id="title" aria-describedby="titleHelp" placeholder="Ingrese el título del ToDo" required  v-model="editedTitulo">
                 <small id="titleHelp" class="form-text text-danger" style="display: none">Rellene este campo</small>
@@ -124,12 +120,11 @@ Vue.component('tablatodos',{
             </thead>
             <tbody>
                 <tr v-for="(todo, index) of todos">
-                    <td>{{todo.id}}</td>
                     <td>{{todo.title}}</td>
                     <td>{{todo.description}}</td>
                     <td>
                         <button class="btn btn-info" @click="getToDoForUpdate(todo.id)">EDITAR</button>
-                        <button class="btn btn-danger" @click="eliminarTodo(todo.id)">ELIMINAR</button>
+                        <button class="btn btn-danger" @click="eliminarTodo(todo.id, todo.title)">ELIMINAR</button>
                     </td>
                 </tr>
             </tbody>
@@ -144,10 +139,10 @@ Vue.component('tablatodos',{
     },
     methods: {
         ...Vuex.mapActions(['getToDos', 'deleteToDo', 'getToDoForUpdate']),
-        eliminarTodo(id){
+        eliminarTodo(id, titulo){
             Swal.fire({
                 title: 'Estas seguro?',
-                text: "Deseas Eliminar el ToDo: " + id,
+                text: "Deseas Eliminar el ToDo: " + titulo,
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -171,7 +166,7 @@ const store = new Vuex.Store({
     state: {
         titulo: 'CRUD de ToDo\'s',
         subtitulo: '(Python + Flask + Vue.js)',
-        columnas: ['Id', 'Título', 'Descripción', 'Acciones'],
+        columnas: ['Título', 'Descripción', 'Acciones'],
         todos: [],
         nuevoTitulo: '',
         nuevaDescripcion: '',
@@ -206,7 +201,7 @@ const store = new Vuex.Store({
         successDeletedToDo(state, deletedTodo){
             Swal.fire(
                 '¡TODO ELIMINADO EXITOSAMENTE!',
-                'ToDo: ' + deletedTodo,
+                '',
                 'success'
             );
         },
@@ -298,7 +293,7 @@ const store = new Vuex.Store({
             try {
                 const fetchResponse = await fetch(server_protocol+'://'+server_ip + ':' + server_port + '/' + id, settings);
                 dispatch('getToDos');
-                commit('successDeletedToDo', id);
+                commit('successDeletedToDo');
             } catch(e) {
                 Swal.fire(
                     '¡ERROR!',
